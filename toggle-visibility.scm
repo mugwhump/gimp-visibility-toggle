@@ -32,8 +32,9 @@
 (macro (define-layer-moving-function form) 
        (let* (
               (func-name (cadr form))
-              (x-off (caddr form))
-              (y-off (cadddr form))
+              (direction (caddr form))
+              (x-off (cadddr form))
+              (y-off (caddddr form))
               )
        `(begin
         (define (func-name img layer) 
@@ -42,8 +43,8 @@
                   (gimp-displays-flush))) 
         (script-fu-register
           (symbol->string ,func-name)
-          "Move da shit"                        ; Label
-          "It moves shit"
+          ,(string-append "Translate layer " direction)                        ; Label
+          ,(string-append "Moves current layer slightly " direction)                        
           "Grayson Bartlet"
           "Fat Man License"
           "May 2014"
@@ -55,4 +56,5 @@
         (script-fu-menu-register (symbol->string ,func-name) "<Image>/Layer/Toggle")
 )))
 
-(define-layer-moving-function 'script-fu-move-layer-up 0 -10)
+(define-layer-moving-function 'script-fu-move-layer-up "up" 0 -10)
+(define-layer-moving-function 'script-fu-move-layer-down "down" 0 10)
