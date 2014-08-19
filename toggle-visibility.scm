@@ -32,19 +32,22 @@
 (macro (define-layer-moving-function form) 
        (let* (
               (func-name (cadr form))
-              (direction (caddr form))
-              (x-off (cadddr form))
-              (y-off (caddddr form))
+              (func-string (caddr form))
+              (direction (cadddr form))
+              (x-off (cadddr (cdr form)))
+              (y-off (cadddr (cddr form)))
               )
        `(begin
+        (gimp-message (symbol->string ,func-name))
         (define (func-name img layer) 
                 (begin
                   (gimp-layer-translate layer ,x-off ,y-off)
                   (gimp-displays-flush))) 
+        (gimp-message "defined")
         (script-fu-register
           (symbol->string ,func-name)
-          ,(string-append "Translate layer " direction)                        ; Label
-          ,(string-append "Moves current layer slightly " direction)                        
+          (string-append "Translate layer " ,direction)                        ; Label
+          (string-append "Moves current layer slightly " ,direction)                        
           "Grayson Bartlet"
           "Fat Man License"
           "May 2014"
@@ -56,5 +59,5 @@
         (script-fu-menu-register (symbol->string ,func-name) "<Image>/Layer/Toggle")
 )))
 
-(define-layer-moving-function 'script-fu-move-layer-up "up" 0 -10)
-(define-layer-moving-function 'script-fu-move-layer-down "down" 0 10)
+(define-layer-moving-function 'script-fu-move-layer-up "script-fu-move-layer-up" "up" 0 -10)
+;(define-layer-moving-function 'script-fu-move-layer-down "down" 0 10)
