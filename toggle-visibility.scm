@@ -32,18 +32,16 @@
 (macro (define-layer-moving-function form) 
        (let* (
               (func-name (cadr form))
-              (func-string (caddr form))
-              (direction (cadddr form))
-              (x-off (cadddr (cdr form)))
-              (y-off (cadddr (cddr form)))
+              (direction (caddr form))
+              (x-off (cadddr form))
+              (y-off (cadddr (cdr form)))
               )
        `(begin
-        (gimp-message (symbol->string ,func-name))
-        (define (func-name img layer) 
+        (define (func-name img layer) ;binding doesn't happen (unbound variable scriptblabla)
+        ;(define (,func-name img layer) ;variable is not a symbol
                 (begin
                   (gimp-layer-translate layer ,x-off ,y-off)
                   (gimp-displays-flush))) 
-        (gimp-message "defined")
         (script-fu-register
           (symbol->string ,func-name)
           (string-append "Translate layer " ,direction)                        ; Label
@@ -58,6 +56,9 @@
 
         (script-fu-menu-register (symbol->string ,func-name) "<Image>/Layer/Toggle")
 )))
+(define (testfunc x) (+ 1 x))
 
-(define-layer-moving-function 'script-fu-move-layer-up "script-fu-move-layer-up" "up" 0 -10)
-;(define-layer-moving-function 'script-fu-move-layer-down "down" 0 10)
+(define-layer-moving-function 'script-fu-move-layer-down "down" 0 10)
+(define-layer-moving-function 'script-fu-move-layer-up "up" 0 -10)
+(define-layer-moving-function 'script-fu-move-layer-left "left" -10 0)
+(define-layer-moving-function 'script-fu-move-layer-right "right" 10 0)
