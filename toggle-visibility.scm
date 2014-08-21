@@ -37,13 +37,12 @@
               (y-off (cadddr (cdr form)))
               )
        `(begin
-        (define (func-name img layer) ;binding doesn't happen (unbound variable scriptblabla)
-        ;(define (,func-name img layer) ;variable is not a symbol
+        (define (,func-name img layer) ;variable is not a symbol
                 (begin
                   (gimp-layer-translate layer ,x-off ,y-off)
                   (gimp-displays-flush))) 
         (script-fu-register
-          (symbol->string ,func-name)
+          (symbol->string ',func-name)
           (string-append "Translate layer " ,direction)                        ; Label
           (string-append "Moves current layer slightly " ,direction)                        
           "Grayson Bartlet"
@@ -54,11 +53,11 @@
           SF-DRAWABLE "Drawable" 0
         )
 
-        (script-fu-menu-register (symbol->string ,func-name) "<Image>/Layer/Toggle")
+        (script-fu-menu-register (symbol->string ',func-name) "<Image>/Layer/Toggle")
 )))
 (define (testfunc x) (+ 1 x))
 
-(define-layer-moving-function 'script-fu-move-layer-down "down" 0 10)
-(define-layer-moving-function 'script-fu-move-layer-up "up" 0 -10)
-(define-layer-moving-function 'script-fu-move-layer-left "left" -10 0)
-(define-layer-moving-function 'script-fu-move-layer-right "right" 10 0)
+(define-layer-moving-function script-fu-move-layer-down "down" 0 10)
+(define-layer-moving-function script-fu-move-layer-up "up" 0 -10)
+(define-layer-moving-function script-fu-move-layer-left "left" -10 0)
+(define-layer-moving-function script-fu-move-layer-right "right" 10 0)
